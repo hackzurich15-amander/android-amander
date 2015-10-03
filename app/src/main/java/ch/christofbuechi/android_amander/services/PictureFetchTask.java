@@ -16,13 +16,20 @@ import ch.christofbuechi.android_amander.model.Vehicle;
 /**
  * Created by christof on 03.10.15.
  */
-public class PictureFetchTask extends AsyncTask<List<Vehicle>, Void, List<Vehicle>> {
+public class PictureFetchTask extends AsyncTask<Void, Void, List<Vehicle>> {
 
+    private final ArrayList<Vehicle> freshVehicles;
+    private final ProcessFinishedCallback callback;
+
+    public PictureFetchTask(List<Vehicle> freshVehicles, ProcessFinishedCallback callback) {
+        this.freshVehicles = new ArrayList<>(freshVehicles);
+        this.callback = callback;
+    }
 
     @Override
-    protected List<Vehicle> doInBackground(List<Vehicle>... params) {
+    protected List<Vehicle> doInBackground(Void... params) {
 
-        ArrayList<Vehicle> passed = (ArrayList<Vehicle>) params[0];
+        ArrayList<Vehicle> passed = freshVehicles;
 
 
 
@@ -46,6 +53,7 @@ public class PictureFetchTask extends AsyncTask<List<Vehicle>, Void, List<Vehicl
 
     private Bitmap getBitmap(URL url) {
 
+        Log.d(this.getClass().getName(), "Fetch Bitmap from URL: " + url);
         HttpURLConnection connection = null;
         try {
             connection = (HttpURLConnection) url.openConnection();
@@ -63,5 +71,13 @@ public class PictureFetchTask extends AsyncTask<List<Vehicle>, Void, List<Vehicl
                 connection.disconnect();
             }
         }
+    }
+
+    @Override
+    protected void onPostExecute(List<Vehicle> vehicles) {
+        callback.processFinished();
+
+
+
     }
 }
