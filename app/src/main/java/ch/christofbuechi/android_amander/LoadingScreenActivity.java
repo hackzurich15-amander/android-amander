@@ -36,8 +36,8 @@ public class LoadingScreenActivity extends AppCompatActivity {
     private ProgressDialog mDialog;
 
     @Override
-    public void onCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
-        super.onCreate(savedInstanceState, persistentState);
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_loading_indicator);
         Log.d(this.getClass().getName(), "start Loading Screen Activity");
 
@@ -51,7 +51,7 @@ public class LoadingScreenActivity extends AppCompatActivity {
             DirtyDataPersistence.INSTANCE.setFilter(new FilterInclude(brand, minps, maxprice));
         }
 
-        mDialog = new ProgressDialog(getApplicationContext());
+        mDialog = new ProgressDialog(LoadingScreenActivity.this);
         mDialog.setMessage("Please wait...");
         mDialog.setCancelable(false);
 
