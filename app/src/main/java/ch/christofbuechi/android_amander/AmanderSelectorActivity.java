@@ -1,5 +1,6 @@
 package ch.christofbuechi.android_amander;
 
+import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -16,6 +17,7 @@ import ch.christofbuechi.android_amander.services.DirtyDataPersistence;
 public class AmanderSelectorActivity extends AppCompatActivity {
 
 
+    private static final String TAG ="AmanderSelectorActivity" ;
     private MyCardContainer mCardContainer;
     private MyCarCardStackAdapter adapter;
     private Resources resources;
@@ -23,6 +25,7 @@ public class AmanderSelectorActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d(this.getClass().getName(), "Start Activity");
         setContentView(R.layout.activity_amander_selector);
         mCardContainer = (MyCardContainer) findViewById(R.id.layoutview2);
         resources = getResources();
@@ -43,16 +46,34 @@ public class AmanderSelectorActivity extends AppCompatActivity {
                 @Override
                 public void onLike() {
                     vehicle.match = 1.0;
+                    checkEmpty();
+                    addToDone(vehicle);
                 }
 
                 @Override
                 public void onDislike() {
                     vehicle.match = 0.0;
+                    checkEmpty();
+                    addToDone(vehicle);
                 }
             });
+
             adapter.add(cardModel);
         }
         mCardContainer.setAdapter(adapter);
+    }
+
+    private void addToDone(Vehicle vehicle) {
+        DirtyDataPersistence.INSTANCE.addReviewedVehicle(vehicle);
+    }
+
+    private void checkEmpty() {
+        adapter.pop();
+        Log.i(TAG, "elements in adapter "+adapter.getCount());
+       if( adapter.isEmpty()){
+           Intent intent = new Intent(AmanderSelectorActivity.this, LoadingScreenActivity.class);
+           startActivity(intent);
+       }
     }
 
     private String decriptionFromVehicle(String... magic) {
