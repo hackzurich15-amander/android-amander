@@ -3,6 +3,7 @@ package ch.christofbuechi.android_amander;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import com.andtinder.model.CardModel;
 import com.andtinder.view.CardStackAdapter;
 
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Created by christof on 03.10.15.
@@ -41,8 +43,17 @@ public class MyCarCardStackAdapter extends CardStackAdapter {
                 assert convertView != null;
             }
 
-            ((ImageView) convertView.findViewById(R.id.image)).setImageDrawable(model.getCardImageDrawable());
+
+            List<Bitmap> list = model.getVehicle().imageBitmaps;
+            if (list.size() > 0) {
+                ((ImageView) convertView.findViewById(R.id.image)).setImageBitmap(list.get(0));
+            } else {
+                ((ImageView) convertView.findViewById(R.id.image)).setImageDrawable(model.getCardImageDrawable());
+            }
+
+
             ((TextView) convertView.findViewById(R.id.title)).setText(model.getTitle());
+            ((TextView) convertView.findViewById(R.id.description)).setText(model.getDescription());
 
 
             final View finalConvertView = convertView;

@@ -77,7 +77,8 @@ public class AmanderSelectorActivity extends AppCompatActivity {
     }
 
     private String decriptionFromVehicle(String... magic) {
-        return TextUtils.join("\n", magic);
+        String str = TextUtils.join("\n", magic);
+        return str;
     }
 
 
