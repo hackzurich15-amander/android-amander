@@ -23,18 +23,12 @@ public class AmanderSelectorActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d(this.getClass().getName(), "Start Activity");
         setContentView(R.layout.activity_amander_selector);
         mCardContainer = (MyCardContainer) findViewById(R.id.layoutview2);
         resources = getResources();
 
-
-
-
         List<Vehicle> list = DirtyDataPersistence.INSTANCE.getAllToDoVehicle();
         addToModel(list);
-
-
     }
 
 
