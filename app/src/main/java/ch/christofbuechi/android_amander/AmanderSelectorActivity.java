@@ -99,7 +99,7 @@ public class AmanderSelectorActivity extends AppCompatActivity {
         call.enqueue(new Callback<ResponseDataWrapper>() {
             @Override
             public void onResponse(Response<ResponseDataWrapper> response, Retrofit retrofit) {
-               // Log.d("CallBack", " response is " + response);
+                // Log.d("CallBack", " response is " + response);
                 List<Vehicle> freshVehicles = ((ResponseDataWrapper) response.body()).getVehicles();
                 for (Vehicle vehicle : freshVehicles) {
                     final MyCarCardModel cardModel = new MyCarCardModel(vehicle.brand, decriptionFromVehicle(vehicle.price + "", vehicle.modelDe, vehicle.fuelType, vehicle.powerHp + ""), resources.getDrawable(R.drawable.picture1));
@@ -116,20 +116,20 @@ public class AmanderSelectorActivity extends AppCompatActivity {
                         }
                     });
                     adapter.add(cardModel);
+                    adapter.notifyDataSetChanged();
+
                 }
             }
 
             @Override
             public void onFailure(Throwable t) {
 
-              //  Log.d("CallBack", " Throwable is " + t);
+                //  Log.d("CallBack", " Throwable is " + t);
             }
         });
 
-
         mCardContainer.setAdapter(adapter);
-
-
+        adapter.notifyDataSetChanged();
     }
 
     private String decriptionFromVehicle(String... magic) {
