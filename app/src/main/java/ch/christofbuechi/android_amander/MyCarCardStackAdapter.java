@@ -61,7 +61,7 @@ public class MyCarCardStackAdapter extends CardStackAdapter {
                             .setListener(new AnimatorListenerAdapter() {
                                 @Override
                                 public void onAnimationEnd(Animator animation) {
-//                                    parent.removeViewInLayout(finalConvertView);
+                                    model.getOnCardDimissedListener().onLike();
                                 }
                             });
 
@@ -85,7 +85,7 @@ public class MyCarCardStackAdapter extends CardStackAdapter {
                             .setListener(new AnimatorListenerAdapter() {
                                 @Override
                                 public void onAnimationEnd(Animator animation) {
-//                                    parent.removeViewInLayout(finalConvertView);
+                                    model.getOnCardDimissedListener().onDislike();
                                 }
                             });
 
