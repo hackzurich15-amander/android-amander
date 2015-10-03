@@ -17,12 +17,14 @@ import com.squareup.okhttp.OkHttpClient;
 import java.util.ArrayList;
 import java.util.List;
 
+import ch.christofbuechi.android_amander.model.FilterInclude;
 import ch.christofbuechi.android_amander.model.RequestData;
 import ch.christofbuechi.android_amander.model.ResponseDataWrapper;
-import ch.christofbuechi.android_amander.model.FilterInclude;
 import ch.christofbuechi.android_amander.model.Vehicle;
 import ch.christofbuechi.android_amander.model.Wrapper;
 import ch.christofbuechi.android_amander.services.Azure;
+import ch.christofbuechi.android_amander.services.PictureFetchTask;
+import ch.christofbuechi.android_amander.services.ProcessFinishedCallback;
 import retrofit.Call;
 import retrofit.Callback;
 import retrofit.GsonConverterFactory;
@@ -31,7 +33,7 @@ import retrofit.Retrofit;
 
 public class AmanderSelectorActivity extends AppCompatActivity {
     private static final String VEHICLES_KEY = "VEHICLES_LEARNED";
-    SharedPreferences mPrefs = getPreferences(MODE_PRIVATE);
+
 
     private static final String API_URL = "http://amander.azurewebsites.net";
     private MyCardContainer mCardContainer;
@@ -40,6 +42,7 @@ public class AmanderSelectorActivity extends AppCompatActivity {
     private Retrofit retrofit;
     private FilterInclude filter;
     private RequestData wrapper;
+    private SharedPreferences mPrefs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,8 +74,15 @@ public class AmanderSelectorActivity extends AppCompatActivity {
 
         resources = getResources();
         adapter = new MyCarCardStackAdapter(this);
+        fetchinitialDataTrainingSet();
 
 
+    }
+
+    @Override
+    public View onCreateView(String name, Context context, AttributeSet attrs) {
+        mPrefs = getPreferences(MODE_PRIVATE);
+        return super.onCreateView(name, context, attrs);
     }
 
     private RequestData setupRequestWithTrainingsSet(List<Vehicle> vehicle) {
@@ -86,7 +96,7 @@ public class AmanderSelectorActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         //todo: write Trainingsset to sharedPref
-        save();
+        save(null);
         super.onDestroy();
     }
 
@@ -99,37 +109,52 @@ public class AmanderSelectorActivity extends AppCompatActivity {
         call.enqueue(new Callback<ResponseDataWrapper>() {
             @Override
             public void onResponse(Response<ResponseDataWrapper> response, Retrofit retrofit) {
-                // Log.d("CallBack", " response is " + response);
-                List<Vehicle> freshVehicles = ((ResponseDataWrapper) response.body()).getVehicles();
-                for (Vehicle vehicle : freshVehicles) {
-                    final MyCarCardModel cardModel = new MyCarCardModel(vehicle.brand, decriptionFromVehicle(vehicle.price + "", vehicle.modelDe, vehicle.fuelType, vehicle.powerHp + ""), resources.getDrawable(R.drawable.picture1));
-                    cardModel.setOnCardDimissedListener(new CardModel.OnCardDimissedListener() {
-                        @Override
-                        public void onLike() {
-                            cardModel.setLike(true);
-                        }
+                final List<Vehicle> freshVehicles = response.body().getVehicles();
 
-                        @Override
-                        public void onDislike() {
-                            cardModel.setLike(false);
+                PictureFetchTask task = new PictureFetchTask(freshVehicles, new ProcessFinishedCallback() {
+                    @Override
+                    public void processFinished() {
+                        addToModel(freshVehicles);
+                    }
+                });
+                task.execute();
 
-                        }
-                    });
-                    adapter.add(cardModel);
-                    adapter.notifyDataSetChanged();
 
-                }
             }
 
             @Override
             public void onFailure(Throwable t) {
 
-                //  Log.d("CallBack", " Throwable is " + t);
+              //  Log.d("CallBack", " Throwable is " + t);
             }
         });
 
+
         mCardContainer.setAdapter(adapter);
         adapter.notifyDataSetChanged();
+    }
+
+    private void addToModel(List<Vehicle> freshVehicles) {
+        for (Vehicle vehicle : freshVehicles) {
+            Log.d(this.getClass().getName(), "Fetched Vehicle: " + vehicle.brand);
+
+            final MyCarCardModel cardModel = new MyCarCardModel(vehicle.brand, decriptionFromVehicle(vehicle.price + "", vehicle.modelDe, vehicle.fuelType, vehicle.powerHp + ""), resources.getDrawable(R.drawable.picture1));
+            cardModel.setOnCardDimissedListener(new CardModel.OnCardDimissedListener() {
+                @Override
+                public void onLike() {
+                    cardModel.setLike(true);
+                }
+
+                @Override
+                public void onDislike() {
+                    cardModel.setLike(false);
+
+                }
+            });
+            adapter.add(cardModel);
+        }
+        adapter.notifyDataSetChanged();
+
     }
 
     private String decriptionFromVehicle(String... magic) {
@@ -145,7 +170,10 @@ public class AmanderSelectorActivity extends AppCompatActivity {
     }
 
     private boolean isTrainingSetAvailable() {
-        return load().isEmpty();
+        if (load() != null) {
+            return load().isEmpty();
+        }
+        return false;
     }
 
     private void save(List<Vehicle> vehicles) {
