@@ -3,8 +3,8 @@ package ch.christofbuechi.android_amander.services;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Vector;
 
+import ch.christofbuechi.android_amander.model.FilterInclude;
 import ch.christofbuechi.android_amander.model.Vehicle;
 
 /**
@@ -16,6 +16,12 @@ public class DirtyDataPersistence {
     private List<Vehicle> processedEntries = new LinkedList<>();
     public final static DirtyDataPersistence INSTANCE = new DirtyDataPersistence();
 
+    public FilterInclude getFilter() {
+        return filter;
+    }
+
+    private FilterInclude filter;
+
     public void addReviewedVehicle(Vehicle vehicle){
         this.processedEntries.add(vehicle);
     }
@@ -23,8 +29,15 @@ public class DirtyDataPersistence {
     public List<Vehicle> getAllReviewdVehicle(){
         return new ArrayList<>(this.processedEntries);
     }
+
     public void addToDoVehicle(Vehicle vehicle){
         this.toProcessEntries.add(vehicle);
+    }
+
+    public void addTodoVehicleList(List<Vehicle> list ) {
+        for (Vehicle vehicle: list) {
+            addToDoVehicle(vehicle);
+        }
     }
 
     public List<Vehicle> getAllToDoVehicle(){
@@ -35,4 +48,7 @@ public class DirtyDataPersistence {
     }
 
 
+    public void setFilter(FilterInclude filter) {
+        this.filter = filter;
+    }
 }
