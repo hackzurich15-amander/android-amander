@@ -85,8 +85,7 @@ public class LoadingScreen extends AppCompatActivity {
                         DirtyDataPersistence.INSTANCE.addTodoVehicleList(freshVehicles);
                         mDialog.dismiss();
 
-                        Intent intent = new Intent(LoadingScreen.this, AmanderSelectorActivity.class))
-                        ;
+                        Intent intent = new Intent(LoadingScreen.this, AmanderSelectorActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(intent);
                     }
@@ -107,7 +106,7 @@ public class LoadingScreen extends AppCompatActivity {
     private RequestData setupRequestWithTrainingsSet() {
         RequestData requestData = new RequestData();
         requestData.count = 10;
-        requestData.filterInclude = DirtyDataPersistence.INSTANCE.getFilter()
+        requestData.filterInclude = DirtyDataPersistence.INSTANCE.getFilter();
 //        requestData.data = RequestData.fromVehicles(vehicle);
         return requestData;
     }
