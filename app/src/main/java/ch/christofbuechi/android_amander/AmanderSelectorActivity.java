@@ -1,10 +1,12 @@
 package ch.christofbuechi.android_amander;
 
+import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import com.andtinder.model.CardModel;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +28,7 @@ public class AmanderSelectorActivity extends AppCompatActivity {
     private Resources resources;
     private Retrofit retrofit;
     private FilterInclude filter;
+    private Data wrapper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +41,13 @@ public class AmanderSelectorActivity extends AppCompatActivity {
                 .build();
 
 
+        Intent intent = getIntent();
+        int maxprice = intent.getIntExtra("price", 0);
+        int minps = intent.getIntExtra("ps", 0);
+        String brand = intent.getStringExtra("brand");
+
+        filter = new FilterInclude(brand,minps, maxprice);
+        wrapper = setupInitialRequestObject(10, filter, new ArrayList<Wrapper>());
 
 
         resources = getResources();
@@ -52,9 +62,15 @@ public class AmanderSelectorActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onDestroy() {
+        //todo: write Trainingsset to sharedPref
+        super.onDestroy();
+    }
+
     private void fetchDataTrainingSet() {
 
-        Data wrapper = setupInitialRequestObject(10, filter, new ArrayList<Wrapper>());
+
 
         Azure azure = retrofit.create(Azure.class);
         Call<DataWrapper> call = azure.getTrainingSet(wrapper);
@@ -105,6 +121,10 @@ public class AmanderSelectorActivity extends AppCompatActivity {
     }
 
     private boolean isTrainingSetAvailable() {
+        //todo: check persisted json model
+
+        Gson gson = new Gson();
+
 
         return false;
     }

@@ -18,6 +18,11 @@ public class FilterInclude {
     @Expose
     public Integer priceMax;
 
+    public FilterInclude(String brand, Integer psMin, Integer priceMax) {
+        this.brand = brand;
+        this.psMin = psMin;
+        this.priceMax = priceMax;
+    }
 
     public String getBrand() {
         return brand;
