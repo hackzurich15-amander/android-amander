@@ -3,6 +3,8 @@ package ch.christofbuechi.android_amander.model;
 /**
  * Created by christof on 03.10.15.
  */
+import android.graphics.Bitmap;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -74,6 +76,9 @@ public class Vehicle {
     @SerializedName("imageUrl")
     @Expose
     public List<String> imageUrls;
+
+
+    public transient List<Bitmap> imageBitmaps;
 
 
 }
