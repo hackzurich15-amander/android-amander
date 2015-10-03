@@ -38,7 +38,7 @@ public class LoadingScreen extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
         super.onCreate(savedInstanceState, persistentState);
-
+        Log.i(TAG, "onCreate");
         Intent intent = getIntent();
 
         if (intent.getExtras() != null) {
