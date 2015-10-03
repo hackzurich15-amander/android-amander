@@ -6,21 +6,28 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.andtinder.model.CardModel;
 
+import retrofit.GsonConverterFactory;
+import retrofit.Retrofit;
+
 public class AmanderSelectorActivity extends AppCompatActivity {
 
+    private static final String API_URL = "API URL";
     private MyCardContainer mCardContainer;
     private MyCarCardStackAdapter adapter;
-    private Resources r;
+    private Resources resources;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_amander_selector);
         mCardContainer = (MyCardContainer) findViewById(R.id.layoutview2);
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(API_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
 
 
-        r = getResources();
-
+        resources = getResources();
         adapter = new MyCarCardStackAdapter(this);
 
         //check if trainingset is available
@@ -34,7 +41,7 @@ public class AmanderSelectorActivity extends AppCompatActivity {
 
     private void fetchDataTrainingSet() {
 
-        final MyCarCardModel cardModel = new MyCarCardModel("Audi", "Description goes here", r.getDrawable(R.drawable.picture1));
+        final MyCarCardModel cardModel = new MyCarCardModel("Audi", "Description goes here", resources.getDrawable(R.drawable.picture1));
         cardModel.setOnCardDimissedListener(new CardModel.OnCardDimissedListener() {
             @Override
             public void onLike() {
