@@ -29,7 +29,7 @@ import retrofit.Retrofit;
 /**
  * Created by christof on 03.10.15.
  */
-public class LoadingScreen extends AppCompatActivity {
+public class LoadingScreenActivity extends AppCompatActivity {
     private static final String API_URL = "http://amander.azurewebsites.net";
     private static final String TAG = "LoadingScreen";
     private Retrofit retrofit;
@@ -38,7 +38,7 @@ public class LoadingScreen extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
         super.onCreate(savedInstanceState, persistentState);
-        setContentView(R.layout.activity_loading_ingit dicator);
+        setContentView(R.layout.activity_loading_indicator);
         Log.d(this.getClass().getName(), "start Loading Screen Activity");
 
 
