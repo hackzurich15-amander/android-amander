@@ -23,6 +23,7 @@ public class DirtyDataPersistence {
     private FilterInclude filter;
 
     public void addReviewedVehicle(Vehicle vehicle){
+        vehicle.imageBitmaps.clear();
         this.processedEntries.add(vehicle);
     }
 

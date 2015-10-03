@@ -79,7 +79,7 @@ public class AmanderSelectorActivity extends AppCompatActivity {
     }
 
     private void checkEmpty() {
-        adapter.pop();
+       if(!adapter.isEmpty()){ adapter.pop();}
         Log.i(TAG, "elements in adapter "+adapter.getCount());
        if( adapter.isEmpty()){
            Intent intent = new Intent(AmanderSelectorActivity.this, LoadingScreenActivity.class);
