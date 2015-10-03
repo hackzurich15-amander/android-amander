@@ -44,7 +44,7 @@ public class PictureFetchTask extends AsyncTask<Void, Void, List<Vehicle>> {
 
             for (int i = 0; i < v.imageUrls.size(); i++) {
                 try {
-                    v.imageBitmaps.add(getBitmapWithGlide(new URL(v.imageUrls.get(i))));
+                    v.imageBitmaps.add(getBitmap(new URL(v.imageUrls.get(i))));
                 } catch (MalformedURLException e) {
                     e.printStackTrace();
                 }
@@ -81,6 +81,7 @@ public class PictureFetchTask extends AsyncTask<Void, Void, List<Vehicle>> {
 
 
     private Bitmap getBitmapWithGlide(URL url) {
+        Log.d(this.getClass().getName(), "Fetch Bitmap from URL: " + url);
         try {
             return Glide.
                     with(act).
