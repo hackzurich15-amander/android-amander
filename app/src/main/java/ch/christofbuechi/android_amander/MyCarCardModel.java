@@ -5,13 +5,24 @@ import android.graphics.drawable.Drawable;
 
 import com.andtinder.model.CardModel;
 
+import ch.christofbuechi.android_amander.model.Vehicle;
+
 /**
  * Created by christof on 03.10.15.
  */
 public class MyCarCardModel extends CardModel {
 
 
-    private boolean accepted;
+    public Vehicle getVehicle() {
+        return vehicle;
+    }
+
+    public void setVehicle(Vehicle vehicle) {
+        this.vehicle = vehicle;
+    }
+
+    Vehicle vehicle;
+
 
     public MyCarCardModel(AmanderSelectorActivity amanderSelectorActivity, String audi, String s, Drawable drawable) {
         super();
@@ -26,6 +37,10 @@ public class MyCarCardModel extends CardModel {
     public MyCarCardModel(String title, String description, Bitmap cardImage) {
         super(title, description, cardImage);
     }
+
+
+
+
 
     @Override
     public String getTitle() {
@@ -47,7 +62,4 @@ public class MyCarCardModel extends CardModel {
         super.setDescription(description);
     }
 
-    public void setLike(boolean b) {
-        this.accepted = true;
-    }
 }
