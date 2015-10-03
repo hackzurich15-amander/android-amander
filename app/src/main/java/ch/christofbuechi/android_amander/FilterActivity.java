@@ -3,6 +3,7 @@ package ch.christofbuechi.android_amander;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.SeekBar;
@@ -37,14 +38,15 @@ public class FilterActivity extends AppCompatActivity {
         spinner.setAdapter(adapter);
 
 
-
         TextView sendButton = (TextView) findViewById(R.id.sendButton);
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(FilterActivity.this, AmanderSelectorActivity.class);
+                Intent intent = new Intent(FilterActivity.this, LoadingScreenActivity.class);
                 addValuesToIntent(intent);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
+                Log.d(this.getClass().getName(), "before activity");
                 startActivity(intent);
             }
         });

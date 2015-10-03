@@ -38,7 +38,10 @@ public class LoadingScreen extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
         super.onCreate(savedInstanceState, persistentState);
-        Log.i(TAG, "onCreate");
+        setContentView(R.layout.activity_loading_ingit dicator);
+        Log.d(this.getClass().getName(), "start Loading Screen Activity");
+
+
         Intent intent = getIntent();
 
         if (intent.getExtras() != null) {
@@ -52,7 +55,6 @@ public class LoadingScreen extends AppCompatActivity {
         mDialog.setMessage("Please wait...");
         mDialog.setCancelable(false);
 
-        setContentView(R.layout.activity_loading_indicator);
 
         OkHttpClient client = new OkHttpClient();
         client.networkInterceptors().add(new StethoInterceptor());
@@ -63,7 +65,7 @@ public class LoadingScreen extends AppCompatActivity {
                 .client(client)
                 .build();
 
-
+        Log.d(this.getClass().getName(), "start Fetching Date");
         fetchinitialDataTrainingSet();
     }
 
@@ -73,11 +75,13 @@ public class LoadingScreen extends AppCompatActivity {
 
 
         Azure azure = retrofit.create(Azure.class);
+        Log.d(this.getClass().getName(), "start Fetching Date - before");
 
         Call<ResponseDataWrapper> call = azure.loadRepo(setupRequestWithTrainingsSet());
         call.enqueue(new Callback<ResponseDataWrapper>() {
             @Override
             public void onResponse(Response<ResponseDataWrapper> response, Retrofit retrofit) {
+                Log.d(this.getClass().getName(), "received data");
                 final List<Vehicle> freshVehicles = response.body().getVehicles();
 
                 PictureFetchTask task = new PictureFetchTask(freshVehicles, new ProcessFinishedCallback() {
@@ -86,7 +90,7 @@ public class LoadingScreen extends AppCompatActivity {
                         DirtyDataPersistence.INSTANCE.addTodoVehicleList(freshVehicles);
                         mDialog.dismiss();
 
-                        Intent intent = new Intent(LoadingScreen.this, AmanderSelectorActivity.class);
+                        Intent intent = new Intent(LoadingScreenActivity.this, AmanderSelectorActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         Log.i(TAG,"start Activity");
                         startActivity(intent);
@@ -99,7 +103,7 @@ public class LoadingScreen extends AppCompatActivity {
 
             @Override
             public void onFailure(Throwable t) {
-                Log.e("CallBack", " Throwable is " + t);
+                Log.d("CallBack", " Throwable is " + t);
             }
         });
 
