@@ -41,7 +41,7 @@ public class AmanderSelectorActivity extends AppCompatActivity {
         for (final Vehicle vehicle : freshVehicles) {
             Log.d(this.getClass().getName(), "Fetched Vehicle: " + vehicle.brand);
 
-            final MyCarCardModel cardModel = new MyCarCardModel( vehicle.brand, decriptionFromVehicle("Preis :" +vehicle.price +" Chf", "Beschreibung:\n"+vehicle.modelDe, "Betriebsstoff: "+getGasolineDescription(vehicle.fuelType), "PS: "+vehicle.powerHp), resources.getDrawable(R.drawable.picture1));
+            final MyCarCardModel cardModel = new MyCarCardModel( vehicle.brand, decriptionFromVehicle("Preis :" +vehicle.price +" Chf", "Beschreibung:\n"+vehicle.modelDe, "Betriebsstoff: "+getGasolineDescription(vehicle.fuelType), "PS: "+vehicle.powerHp), resources.getDrawable(R.drawable.nopic));
             cardModel.setVehicle(vehicle);
             cardModel.setOnCardDimissedListener(new CardModel.OnCardDimissedListener() {
                 @Override
