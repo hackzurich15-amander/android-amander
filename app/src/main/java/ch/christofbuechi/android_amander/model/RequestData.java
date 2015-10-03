@@ -23,6 +23,11 @@ public class RequestData {
     @Expose
     public FilterInclude filterInclude;
 
-
-
+    public static List<Wrapper> fromVehicles(List<Vehicle> vehicles) {
+        List<Wrapper> wrapped = new ArrayList<>(vehicles.size());
+        for (Vehicle vehicle : vehicles) {
+            wrapped.add(Wrapper.fromVehicle(vehicle));
+        }
+        return  wrapped;
+    }
 }

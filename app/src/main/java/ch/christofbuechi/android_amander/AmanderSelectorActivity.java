@@ -1,9 +1,12 @@
 package ch.christofbuechi.android_amander;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.andtinder.model.CardModel;
@@ -17,6 +20,7 @@ import java.util.List;
 import ch.christofbuechi.android_amander.model.RequestData;
 import ch.christofbuechi.android_amander.model.ResponseDataWrapper;
 import ch.christofbuechi.android_amander.model.FilterInclude;
+import ch.christofbuechi.android_amander.model.Vehicle;
 import ch.christofbuechi.android_amander.model.Wrapper;
 import ch.christofbuechi.android_amander.services.Azure;
 import retrofit.Call;
@@ -26,6 +30,8 @@ import retrofit.Response;
 import retrofit.Retrofit;
 
 public class AmanderSelectorActivity extends AppCompatActivity {
+    private static final String VEHICLES_KEY = "VEHICLES_LEARNED";
+    SharedPreferences mPrefs = getPreferences(MODE_PRIVATE);
 
     private static final String API_URL = "http://amander.azurewebsites.net";
     private MyCardContainer mCardContainer;
@@ -56,25 +62,31 @@ public class AmanderSelectorActivity extends AppCompatActivity {
         int minps = intent.getIntExtra("ps", 0);
         String brand = intent.getStringExtra("brand");
 
-        filter = new FilterInclude(brand,minps, maxprice);
-        wrapper = setupInitialRequestObject(10, filter, new ArrayList<Wrapper>());
-
+        filter = new FilterInclude(brand, minps, maxprice);
+        if (isTrainingSetAvailable()) {
+            wrapper = setupRequestWithTrainingsSet(load());
+        } else {
+            wrapper = setupInitialRequestObject(10, filter, new ArrayList<Wrapper>());
+        }
 
         resources = getResources();
         adapter = new MyCarCardStackAdapter(this);
 
-        //check if trainingset is available
-        if (isTrainingSetAvailable()) {
-            //Todo: read trainingset from sharedstorage
-        } else {
-            fetchinitialDataTrainingSet();
-        }
 
+    }
+
+    private RequestData setupRequestWithTrainingsSet(List<Vehicle> vehicle) {
+        RequestData requestData = new RequestData();
+        requestData.count = 10;
+        requestData.filterInclude = filter;
+        requestData.data = RequestData.fromVehicles(vehicle);
+        return requestData;
     }
 
     @Override
     protected void onDestroy() {
         //todo: write Trainingsset to sharedPref
+        save();
         super.onDestroy();
     }
 
@@ -87,68 +99,41 @@ public class AmanderSelectorActivity extends AppCompatActivity {
         call.enqueue(new Callback<ResponseDataWrapper>() {
             @Override
             public void onResponse(Response<ResponseDataWrapper> response, Retrofit retrofit) {
-                Log.d("CallBack", " response is " + response);
+               // Log.d("CallBack", " response is " + response);
+                List<Vehicle> freshVehicles = ((ResponseDataWrapper) response.body()).getVehicles();
+                for (Vehicle vehicle : freshVehicles) {
+                    final MyCarCardModel cardModel = new MyCarCardModel(vehicle.brand, decriptionFromVehicle(vehicle.price + "", vehicle.modelDe, vehicle.fuelType, vehicle.powerHp + ""), resources.getDrawable(R.drawable.picture1));
+                    cardModel.setOnCardDimissedListener(new CardModel.OnCardDimissedListener() {
+                        @Override
+                        public void onLike() {
+                            cardModel.setLike(true);
+                        }
+
+                        @Override
+                        public void onDislike() {
+                            cardModel.setLike(false);
+
+                        }
+                    });
+                    adapter.add(cardModel);
+                }
             }
 
             @Override
             public void onFailure(Throwable t) {
 
-
-                Log.d("CallBack", " Throwable is " +t);
+              //  Log.d("CallBack", " Throwable is " + t);
             }
         });
 
-
-
-
-
-//        azure.getTrainingSet(wrapper, new Callback<DataWrapper>() {
-//            @Override
-//            public void onResponse(Response<DataWrapper> response, Retrofit retrofit) {
-//                Log.d(this.getClass().getName(), "Response successfull");
-//            }
-//
-//            @Override
-//            public void onFailure(Throwable t) {
-//                Log.d(this.getClass().getName(), "Response unsuccesfull");
-//
-//            }
-//        });
-
-
-        final MyCarCardModel cardModel = new MyCarCardModel("Audi", "Description goes here", resources.getDrawable(R.drawable.picture1));
-        cardModel.setOnCardDimissedListener(new CardModel.OnCardDimissedListener() {
-            @Override
-            public void onLike() {
-                cardModel.setLike(true);
-            }
-
-            @Override
-            public void onDislike() {
-                cardModel.setLike(false);
-
-            }
-        });
-        adapter.add(cardModel);
-
-        final MyCarCardModel cardModel1 = new MyCarCardModel("Mercedes", "Description goes here", resources.getDrawable(R.drawable.picture1));
-        cardModel1.setOnCardDimissedListener(new CardModel.OnCardDimissedListener() {
-            @Override
-            public void onLike() {
-                cardModel.setLike(true);
-            }
-
-            @Override
-            public void onDislike() {
-                cardModel.setLike(false);
-
-            }
-        });
-        adapter.add(cardModel1);
 
         mCardContainer.setAdapter(adapter);
 
 
+    }
+
+    private String decriptionFromVehicle(String... magic) {
+        return TextUtils.join("\n", magic);
     }
 
     private RequestData setupInitialRequestObject(int count, FilterInclude filter, List<Wrapper> list) {
@@ -160,12 +145,24 @@ public class AmanderSelectorActivity extends AppCompatActivity {
     }
 
     private boolean isTrainingSetAvailable() {
-        //todo: check persisted json model
+        return load().isEmpty();
+    }
 
+    private void save(List<Vehicle> vehicles) {
+        SharedPreferences.Editor prefsEditor = mPrefs.edit();
         Gson gson = new Gson();
+        String json = gson.toJson(vehicles); // myObject - instance of MyObject
+        prefsEditor.putString(VEHICLES_KEY, json);
+        prefsEditor.commit();
+    }
 
+    private List<Vehicle> load() {
+        Gson gson = new Gson();
+        String json = mPrefs.getString(VEHICLES_KEY, "[]");
+        java.lang.reflect.Type type = new com.google.gson.reflect.TypeToken<List<Vehicle>>() {
+        }.getType();
+        return gson.fromJson(json, type);
 
-        return false;
     }
 
 }

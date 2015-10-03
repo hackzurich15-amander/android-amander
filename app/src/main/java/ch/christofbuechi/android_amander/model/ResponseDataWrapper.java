@@ -12,6 +12,13 @@ public class ResponseDataWrapper {
 
 
     @SerializedName("data")
-    List<Vehicle> vehicles;
+   private List<Vehicle> vehicles;
 
+    public List<Vehicle> getVehicles() {
+        return vehicles;
+    }
+
+    public void setVehicles(List<Vehicle> vehicles) {
+        this.vehicles = vehicles;
+    }
 }

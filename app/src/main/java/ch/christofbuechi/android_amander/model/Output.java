@@ -20,7 +20,12 @@ public class Output {
         this.match = match;
     }
 
-    public void setMatchBoolean(Boolean match) {
+    public void setMatch(Double match) {
+       this.setMatch(match == null ? 0 :match.intValue());
+    }
+
+
+    public void setMatch(Boolean match) {
         this.match = match ? 1 : 0;
     }
 
