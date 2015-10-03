@@ -13,11 +13,16 @@ import java.util.List;
 
 public class Data {
 
-    @SerializedName("data")
+    @SerializedName("trainingSet")
     @Expose
-    public List<Information> data = new ArrayList<Information>();
-    @SerializedName("offset")
+    public List<Wrapper> data = new ArrayList<Wrapper>();
+    @SerializedName("count")
     @Expose
-    public Integer offset;
+    public Integer count;
+    @SerializedName("filterInclude")
+    @Expose
+    public FilterInclude filterInclude;
+
+
 
 }

@@ -4,6 +4,7 @@
           package="ch.christofbuechi.android_amander">
 
     <application
+        android:name=".MyApplication"
         android:allowBackup="true"
         tools:replace="android:icon"
         android:icon="@mipmap/launcher_icon"

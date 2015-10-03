@@ -6,15 +6,16 @@ import com.google.gson.annotations.SerializedName;
 /**
  * Created by christof on 03.10.15.
  */
-public class DataWrapper {
+public class Wrapper {
 
 
-    @SerializedName("data")
+
+
+    @SerializedName("input")
     @Expose
-    public String brand;
+    private Input input;
 
-
-
-    Data data;
-
+    @SerializedName("output")
+    @Expose
+    private Output output;
 }

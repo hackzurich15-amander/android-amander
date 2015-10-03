@@ -6,15 +6,14 @@ import com.google.gson.annotations.SerializedName;
 /**
  * Created by christof on 03.10.15.
  */
-public class DataWrapper {
+public class TrainingSet {
 
-
-    @SerializedName("data")
+    @SerializedName("input")
     @Expose
-    public String brand;
+        private Wrapper input;
 
 
-
-    Data data;
-
+    public TrainingSet(Wrapper input) {
+        this.input = input;
+    }
 }

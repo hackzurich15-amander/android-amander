@@ -6,7 +6,7 @@ package ch.christofbuechi.android_amander.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Information {
+public class Vehicle {
 
     @SerializedName("vin")
     @Expose

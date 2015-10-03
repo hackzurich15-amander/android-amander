@@ -6,7 +6,13 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.andtinder.model.CardModel;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import ch.christofbuechi.android_amander.model.Data;
 import ch.christofbuechi.android_amander.model.DataWrapper;
+import ch.christofbuechi.android_amander.model.FilterInclude;
+import ch.christofbuechi.android_amander.model.Wrapper;
 import ch.christofbuechi.android_amander.services.Azure;
 import retrofit.Call;
 import retrofit.GsonConverterFactory;
@@ -14,11 +20,12 @@ import retrofit.Retrofit;
 
 public class AmanderSelectorActivity extends AppCompatActivity {
 
-    private static final String API_URL = "http://4amander.cloudapp.net";
+    private static final String API_URL = "http://amander.azurewebsites.net";
     private MyCardContainer mCardContainer;
     private MyCarCardStackAdapter adapter;
     private Resources resources;
     private Retrofit retrofit;
+    private FilterInclude filter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +33,7 @@ public class AmanderSelectorActivity extends AppCompatActivity {
         setContentView(R.layout.activity_amander_selector);
         mCardContainer = (MyCardContainer) findViewById(R.id.layoutview2);
         retrofit = new Retrofit.Builder()
+
                 .baseUrl(API_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
@@ -45,8 +53,10 @@ public class AmanderSelectorActivity extends AppCompatActivity {
 
     private void fetchDataTrainingSet() {
 
+        Data wrapper = setupInitialRequestObject(10, filter, new ArrayList<Wrapper>());
+
         Azure azure = retrofit.create(Azure.class);
-        Call<DataWrapper> call = azure.trainignset();
+        Call<DataWrapper> call = azure.getTrainingSet(wrapper);
 
 
 
@@ -83,6 +93,14 @@ public class AmanderSelectorActivity extends AppCompatActivity {
         mCardContainer.setAdapter(adapter);
 
 
+    }
+
+    private Data setupInitialRequestObject(int count, FilterInclude filter, List<Wrapper> list) {
+        Data data = new Data();
+        data.count = count;
+        data.filterInclude = filter;
+        data.data = list;
+        return data;
     }
 
     private boolean isTrainingSetAvailable() {
