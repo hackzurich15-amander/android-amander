@@ -1,5 +1,6 @@
 package ch.christofbuechi.android_amander;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
@@ -7,7 +8,9 @@ import android.location.Location;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.AttributeSet;
 import android.util.Log;
+import android.view.View;
 
 import com.andtinder.model.CardModel;
 import com.facebook.stetho.okhttp.StethoInterceptor;
@@ -23,6 +26,7 @@ import ch.christofbuechi.android_amander.model.ResponseDataWrapper;
 import ch.christofbuechi.android_amander.model.Vehicle;
 import ch.christofbuechi.android_amander.model.Wrapper;
 import ch.christofbuechi.android_amander.services.Azure;
+import ch.christofbuechi.android_amander.services.DirtyDataPersistence;
 import ch.christofbuechi.android_amander.services.PictureFetchTask;
 import ch.christofbuechi.android_amander.services.ProcessFinishedCallback;
 import retrofit.Call;
@@ -95,8 +99,6 @@ public class AmanderSelectorActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        //todo: write Trainingsset to sharedPref
-        save(null);
         super.onDestroy();
     }
 
@@ -176,21 +178,12 @@ public class AmanderSelectorActivity extends AppCompatActivity {
         return false;
     }
 
-    private void save(List<Vehicle> vehicles) {
-        SharedPreferences.Editor prefsEditor = mPrefs.edit();
-        Gson gson = new Gson();
-        String json = gson.toJson(vehicles); // myObject - instance of MyObject
-        prefsEditor.putString(VEHICLES_KEY, json);
-        prefsEditor.commit();
+    private void save(Vehicle vehicle) {
+        DirtyDataPersistence.INSTANCE.addReviewedVehicle(vehicle);
     }
 
     private List<Vehicle> load() {
-        Gson gson = new Gson();
-        String json = mPrefs.getString(VEHICLES_KEY, "[]");
-        java.lang.reflect.Type type = new com.google.gson.reflect.TypeToken<List<Vehicle>>() {
-        }.getType();
-        return gson.fromJson(json, type);
-
+        return DirtyDataPersistence.INSTANCE.getAllReviewdVehicle();
     }
 
 }
