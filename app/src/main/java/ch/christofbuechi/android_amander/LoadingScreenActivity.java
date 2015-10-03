@@ -37,8 +37,9 @@ public class LoadingScreenActivity extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
         super.onCreate(savedInstanceState, persistentState);
+        setContentView(R.layout.activity_loading_ingit dicator);
+        Log.d(this.getClass().getName(), "start Loading Screen Activity");
 
-        Log.d(this.getClass().getName(), "Loading");
 
         Intent intent = getIntent();
 
@@ -53,7 +54,6 @@ public class LoadingScreenActivity extends AppCompatActivity {
         mDialog.setMessage("Please wait...");
         mDialog.setCancelable(false);
 
-        setContentView(R.layout.activity_loading_indicator);
 
         OkHttpClient client = new OkHttpClient();
         client.networkInterceptors().add(new StethoInterceptor());

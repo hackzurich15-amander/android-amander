@@ -2,5 +2,6 @@
     <string name="app_name">android-amander</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_amander_selector">AmanderSelectorActivity</string>
+    <string name="title_activity_loading">LoadingScreen</string>
     <string name="title_activity_filter">FilterActivity</string>
 </resources>
