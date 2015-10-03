@@ -1,15 +1,19 @@
 package ch.christofbuechi.android_amander.services;
 
+import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.util.Log;
+
+import com.bumptech.glide.Glide;
 
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import ch.christofbuechi.android_amander.model.Vehicle;
 
@@ -21,17 +25,18 @@ public class PictureFetchTask extends AsyncTask<Void, Void, List<Vehicle>> {
     private static final String TAG = "PictureFetchTask";
     private final ArrayList<Vehicle> freshVehicles;
     private final ProcessFinishedCallback callback;
+    private Activity act;
 
-    public PictureFetchTask(List<Vehicle> freshVehicles, ProcessFinishedCallback callback) {
+    public PictureFetchTask(Activity act, List<Vehicle> freshVehicles, ProcessFinishedCallback callback) {
+        this.act = act;
         this.freshVehicles = new ArrayList<>(freshVehicles);
         this.callback = callback;
     }
 
     @Override
     protected List<Vehicle> doInBackground(Void... params) {
-        Log.i(TAG,"loading started");
+        Log.i(TAG, "loading started");
         ArrayList<Vehicle> passed = freshVehicles;
-
 
 
         for (Vehicle v : passed) {
@@ -39,7 +44,7 @@ public class PictureFetchTask extends AsyncTask<Void, Void, List<Vehicle>> {
 
             for (int i = 0; i < v.imageUrls.size(); i++) {
                 try {
-                    v.imageBitmaps.add(getBitmap(new URL(v.imageUrls.get(i))));
+                    v.imageBitmaps.add(getBitmapWithGlide(new URL(v.imageUrls.get(i))));
                 } catch (MalformedURLException e) {
                     e.printStackTrace();
                 }
@@ -74,11 +79,28 @@ public class PictureFetchTask extends AsyncTask<Void, Void, List<Vehicle>> {
         }
     }
 
+
+    private Bitmap getBitmapWithGlide(URL url) {
+        try {
+            return Glide.
+                    with(act).
+                    load(url).
+                    asBitmap().
+                    into(300, 300).
+                    get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
     @Override
     protected void onPostExecute(List<Vehicle> vehicles) {
-        Log.i(TAG,"onPostExecute");
+        Log.i(TAG, "onPostExecute");
         callback.processFinished();
-
 
 
     }
