@@ -66,7 +66,7 @@ public class MyCarCardStackAdapter extends CardStackAdapter {
                             });
 
 
-                    model.setLike(true);
+                    model.getVehicle().match = 1.0;
                 }
             });
 
@@ -89,8 +89,7 @@ public class MyCarCardStackAdapter extends CardStackAdapter {
                                 }
                             });
 
-
-                    model.setLike(false);
+                    model.getVehicle().match = 0.0;
                 }
             });
 

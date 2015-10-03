@@ -133,25 +133,26 @@ public class AmanderSelectorActivity extends AppCompatActivity {
 
 
         mCardContainer.setAdapter(adapter);
-
+        mCardContainer.getAdapter().notifyAll();
+        mCardContainer.notifyAll();
 
     }
 
     private void addToModel(List<Vehicle> freshVehicles) {
-        for (Vehicle vehicle : freshVehicles) {
+        for (final Vehicle vehicle : freshVehicles) {
             Log.d(this.getClass().getName(), "Fetched Vehicle: " + vehicle.brand);
 
             final MyCarCardModel cardModel = new MyCarCardModel(vehicle.brand, decriptionFromVehicle(vehicle.price + "", vehicle.modelDe, vehicle.fuelType, vehicle.powerHp + ""), resources.getDrawable(R.drawable.picture1));
+            cardModel.setVehicle(vehicle);
             cardModel.setOnCardDimissedListener(new CardModel.OnCardDimissedListener() {
                 @Override
                 public void onLike() {
-                    cardModel.setLike(true);
+                    vehicle.match = 1.0;
                 }
 
                 @Override
                 public void onDislike() {
-                    cardModel.setLike(false);
-
+                    vehicle.match = 0.0;
                 }
             });
             adapter.add(cardModel);
