@@ -18,6 +18,7 @@ import ch.christofbuechi.android_amander.model.Vehicle;
  */
 public class PictureFetchTask extends AsyncTask<Void, Void, List<Vehicle>> {
 
+    private static final String TAG = "PictureFetchTask";
     private final ArrayList<Vehicle> freshVehicles;
     private final ProcessFinishedCallback callback;
 
@@ -28,7 +29,7 @@ public class PictureFetchTask extends AsyncTask<Void, Void, List<Vehicle>> {
 
     @Override
     protected List<Vehicle> doInBackground(Void... params) {
-
+        Log.i(TAG,"loading started");
         ArrayList<Vehicle> passed = freshVehicles;
 
 
@@ -75,6 +76,7 @@ public class PictureFetchTask extends AsyncTask<Void, Void, List<Vehicle>> {
 
     @Override
     protected void onPostExecute(List<Vehicle> vehicles) {
+        Log.i(TAG,"onPostExecute");
         callback.processFinished();
 
 

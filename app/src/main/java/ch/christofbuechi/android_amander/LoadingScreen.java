@@ -31,6 +31,7 @@ import retrofit.Retrofit;
  */
 public class LoadingScreen extends AppCompatActivity {
     private static final String API_URL = "http://amander.azurewebsites.net";
+    private static final String TAG = "LoadingScreen";
     private Retrofit retrofit;
     private ProgressDialog mDialog;
 
@@ -87,6 +88,7 @@ public class LoadingScreen extends AppCompatActivity {
 
                         Intent intent = new Intent(LoadingScreen.this, AmanderSelectorActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        Log.i(TAG,"start Activity");
                         startActivity(intent);
                     }
                 });
@@ -97,7 +99,7 @@ public class LoadingScreen extends AppCompatActivity {
 
             @Override
             public void onFailure(Throwable t) {
-                Log.d("CallBack", " Throwable is " + t);
+                Log.e("CallBack", " Throwable is " + t);
             }
         });
 
