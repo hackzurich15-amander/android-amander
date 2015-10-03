@@ -32,6 +32,7 @@ public class AmanderSelectorActivity extends AppCompatActivity {
 
         List<Vehicle> list = DirtyDataPersistence.INSTANCE.getAllToDoVehicle();
         addToModel(list);
+        DirtyDataPersistence.INSTANCE.clearToDoVehicles();
     }
 
 
