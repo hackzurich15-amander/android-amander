@@ -1,9 +1,12 @@
 package ch.christofbuechi.android_amander;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -17,6 +20,8 @@ import java.util.Collection;
  */
 public class MyCarCardStackAdapter extends CardStackAdapter {
 
+    private static final long DURATIONTIME = 700;
+
     public MyCarCardStackAdapter(Context context) {
         super(context);
     }
@@ -26,7 +31,7 @@ public class MyCarCardStackAdapter extends CardStackAdapter {
     }
 
     @Override
-    protected View getCardView(int i, CardModel cardModel, View convertView, ViewGroup parent) {
+    protected View getCardView(int i, CardModel cardModel, View convertView, final ViewGroup parent) {
 
         if (cardModel instanceof MyCarCardModel) {
             final MyCarCardModel model = (MyCarCardModel) cardModel;
@@ -40,18 +45,51 @@ public class MyCarCardStackAdapter extends CardStackAdapter {
             ((TextView) convertView.findViewById(R.id.title)).setText(model.getTitle());
 
 
-            ((TextView) convertView.findViewById(R.id.circle_yes)).setOnClickListener(new View.OnClickListener() {
+            final View finalConvertView = convertView;
+            convertView.findViewById(R.id.circle_yes).setOnClickListener(new View.OnClickListener() {
 
                 @Override
                 public void onClick(View v) {
+
+                    finalConvertView.animate()
+                            .setDuration(DURATIONTIME)
+                            .alpha(.75f)
+                            .setInterpolator(new LinearInterpolator())
+                            .x(finalConvertView.getWidth())
+                            .y(finalConvertView.getHeight())
+                            .rotation(Math.copySign(45, 0))
+                            .setListener(new AnimatorListenerAdapter() {
+                                @Override
+                                public void onAnimationEnd(Animator animation) {
+//                                    parent.removeViewInLayout(finalConvertView);
+                                }
+                            });
+
+
                     model.setLike(true);
                 }
             });
 
-            ((TextView) convertView.findViewById(R.id.circle_no)).setOnClickListener(new View.OnClickListener() {
+            convertView.findViewById(R.id.circle_no).setOnClickListener(new View.OnClickListener() {
 
                 @Override
                 public void onClick(View v) {
+
+                    finalConvertView.animate()
+                            .setDuration(DURATIONTIME)
+                            .alpha(.75f)
+                            .setInterpolator(new LinearInterpolator())
+                            .x(-finalConvertView.getWidth())
+                            .y(finalConvertView.getHeight())
+                            .rotation(Math.copySign(45, 0))
+                            .setListener(new AnimatorListenerAdapter() {
+                                @Override
+                                public void onAnimationEnd(Animator animation) {
+//                                    parent.removeViewInLayout(finalConvertView);
+                                }
+                            });
+
+
                     model.setLike(false);
                 }
             });

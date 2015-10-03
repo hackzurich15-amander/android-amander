@@ -462,33 +462,33 @@ public class MyCardContainer extends AdapterView<ListAdapter> {
                 if(mTopCard != null)
                     mTopCard.setLayerType(LAYER_TYPE_HARDWARE, null);
 
-                if (cardModel.getOnCardDimissedListener() != null) {
-                    if ( targetX > 0 ) {
-                        cardModel.getOnCardDimissedListener().onLike();
-                    } else {
-                        cardModel.getOnCardDimissedListener().onDislike();
+                    if (cardModel.getOnCardDimissedListener() != null) {
+                        if ( targetX > 0 ) {
+                            cardModel.getOnCardDimissedListener().onLike();
+                        } else {
+                            cardModel.getOnCardDimissedListener().onDislike();
+                        }
                     }
-                }
 
-                topCard.animate()
-                        .setDuration(duration)
-                        .alpha(.75f)
-                        .setInterpolator(new LinearInterpolator())
-                        .x(targetX)
-                        .y(targetY)
-                        .rotation(Math.copySign(45, velocityX))
-                        .setListener(new AnimatorListenerAdapter() {
-                            @Override
-                            public void onAnimationEnd(Animator animation) {
-                                removeViewInLayout(topCard);
-                                ensureFull();
-                            }
+                    topCard.animate()
+                            .setDuration(duration)
+                            .alpha(.75f)
+                            .setInterpolator(new LinearInterpolator())
+                            .x(targetX)
+                            .y(targetY)
+                            .rotation(Math.copySign(45, velocityX))
+                            .setListener(new AnimatorListenerAdapter() {
+                                @Override
+                                public void onAnimationEnd(Animator animation) {
+                                    removeViewInLayout(topCard);
+                                    ensureFull();
+                                }
 
-                            @Override
-                            public void onAnimationCancel(Animator animation) {
-                                onAnimationEnd(animation);
-                            }
-                        });
+                                @Override
+                                public void onAnimationCancel(Animator animation) {
+                                    onAnimationEnd(animation);
+                                }
+                            });
                 return true;
             } else
                 return false;

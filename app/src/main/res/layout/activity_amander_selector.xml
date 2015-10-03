@@ -18,6 +18,12 @@
         android:layout_gravity="center_horizontal"
         />
 
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="2dp"
+        android:background="@color/card_outline"
+        />
+
     <ch.christofbuechi.android_amander.MyCardContainer
         android:id="@+id/layoutview2"
         android:layout_width="fill_parent"
