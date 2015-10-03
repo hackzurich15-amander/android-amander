@@ -4,9 +4,12 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
 import com.andtinder.model.CardModel;
+import com.facebook.stetho.okhttp.StethoInterceptor;
 import com.google.gson.Gson;
+import com.squareup.okhttp.OkHttpClient;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +20,9 @@ import ch.christofbuechi.android_amander.model.FilterInclude;
 import ch.christofbuechi.android_amander.model.Wrapper;
 import ch.christofbuechi.android_amander.services.Azure;
 import retrofit.Call;
+import retrofit.Callback;
 import retrofit.GsonConverterFactory;
+import retrofit.Response;
 import retrofit.Retrofit;
 
 public class AmanderSelectorActivity extends AppCompatActivity {
@@ -35,9 +40,14 @@ public class AmanderSelectorActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_amander_selector);
         mCardContainer = (MyCardContainer) findViewById(R.id.layoutview2);
+
+        OkHttpClient client = new OkHttpClient();
+        client.networkInterceptors().add(new StethoInterceptor());
+
         retrofit = new Retrofit.Builder()
                 .baseUrl(API_URL)
                 .addConverterFactory(GsonConverterFactory.create())
+                .client(client)
                 .build();
 
 
@@ -57,7 +67,7 @@ public class AmanderSelectorActivity extends AppCompatActivity {
         if (isTrainingSetAvailable()) {
             //Todo: read trainingset from sharedstorage
         } else {
-            fetchDataTrainingSet();
+            fetchinitialDataTrainingSet();
         }
 
     }
@@ -68,13 +78,42 @@ public class AmanderSelectorActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
-    private void fetchDataTrainingSet() {
-
-
+    private void fetchinitialDataTrainingSet() {
 
         Azure azure = retrofit.create(Azure.class);
-        Call<DataWrapper> call = azure.getTrainingSet(wrapper);
 
+
+        Call<DataWrapper> call = azure.loadRepo(wrapper);
+        call.enqueue(new Callback<DataWrapper>() {
+            @Override
+            public void onResponse(Response<DataWrapper> response, Retrofit retrofit) {
+                Log.d("CallBack", " response is " + response);
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+
+
+                Log.d("CallBack", " Throwable is " +t);
+            }
+        });
+
+
+
+
+
+//        azure.getTrainingSet(wrapper, new Callback<DataWrapper>() {
+//            @Override
+//            public void onResponse(Response<DataWrapper> response, Retrofit retrofit) {
+//                Log.d(this.getClass().getName(), "Response successfull");
+//            }
+//
+//            @Override
+//            public void onFailure(Throwable t) {
+//                Log.d(this.getClass().getName(), "Response unsuccesfull");
+//
+//            }
+//        });
 
 
         final MyCarCardModel cardModel = new MyCarCardModel("Audi", "Description goes here", resources.getDrawable(R.drawable.picture1));
