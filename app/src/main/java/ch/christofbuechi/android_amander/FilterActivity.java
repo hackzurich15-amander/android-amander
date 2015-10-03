@@ -22,10 +22,10 @@ public class FilterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_filter);
 
-        initSeekBars();
-
         minPSValue = (TextView) findViewById(R.id.minpsvalue);
         maxPriceValue = (TextView) findViewById(R.id.maxpricevalue);
+        initSeekBars();
+
 
         spinner = (Spinner) findViewById(R.id.spinner);
 // Create an ArrayAdapter using the string array and a default spinner layout
@@ -52,12 +52,13 @@ public class FilterActivity extends AppCompatActivity {
 
     private void initSeekBars() {
         SeekBar seekPrice = (SeekBar) findViewById(R.id.seekBarprice);
-        seekPrice.incrementProgressBy(1000);
+        initPriceSeekBar(seekPrice);
         final int yourStepPrice = 1000;
+        seekPrice.incrementProgressBy(1000);
         seekPrice.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                progress = ((int)Math.round(progress/yourStepPrice ))*yourStepPrice;
+                progress = ((int) Math.round(progress / yourStepPrice)) * yourStepPrice;
                 seekBar.setProgress(progress);
                 progressPrice = progress;
                 maxPriceValue.setText("" + progressPrice);
@@ -71,12 +72,13 @@ public class FilterActivity extends AppCompatActivity {
         });
 
         SeekBar seekPS = (SeekBar) findViewById(R.id.seekBarps);
-        final int yourStep = 10;
+        initPSSeekBar(seekPS);
+        final int psStep = 10;
         seekPS.incrementProgressBy(10);
         seekPS.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                progress = ((int)Math.round(progress/yourStep ))*yourStep;
+                progress = ((int) Math.round(progress / psStep)) * psStep;
                 seekBar.setProgress(progress);
                 progressPS = progress;
                 minPSValue.setText("" + progressPS);
@@ -88,6 +90,18 @@ public class FilterActivity extends AppCompatActivity {
             public void onStopTrackingTouch(SeekBar seekBar) {
             }
         });
+    }
+
+    private void initPSSeekBar(SeekBar seekPS) {
+        seekPS.setProgress(100);
+        minPSValue.setText("" + 100);
+        progressPS = 100;
+    }
+
+    private void initPriceSeekBar(SeekBar seekPrice) {
+        seekPrice.setProgress(30000);
+        maxPriceValue.setText("" + 30000);
+        progressPrice = 30000;
     }
 
     private void addValuesToIntent(Intent intent) {

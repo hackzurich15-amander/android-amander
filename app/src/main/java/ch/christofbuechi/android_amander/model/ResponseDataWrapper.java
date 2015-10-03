@@ -1,6 +1,5 @@
 package ch.christofbuechi.android_amander.model;
 
-import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
@@ -10,6 +9,14 @@ import java.util.List;
  */
 public class ResponseDataWrapper {
 
+
+    public List<Vehicle> getVehicles() {
+        return vehicles;
+    }
+
+    public void setVehicles(List<Vehicle> vehicles) {
+        this.vehicles = vehicles;
+    }
 
     @SerializedName("data")
     List<Vehicle> vehicles;
