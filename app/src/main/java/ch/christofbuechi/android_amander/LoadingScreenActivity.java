@@ -3,7 +3,6 @@ package ch.christofbuechi.android_amander;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
@@ -36,10 +35,9 @@ public class LoadingScreenActivity extends AppCompatActivity {
     private ProgressDialog mDialog;
 
     @Override
-    public void onCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
-        super.onCreate(savedInstanceState, persistentState);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_loading_indicator);
-        Log.d(this.getClass().getName(), "start Loading Screen Activity");
 
 
         Intent intent = getIntent();
@@ -65,17 +63,15 @@ public class LoadingScreenActivity extends AppCompatActivity {
                 .client(client)
                 .build();
 
-        Log.d(this.getClass().getName(), "start Fetching Date");
         fetchinitialDataTrainingSet();
     }
 
 
     private void fetchinitialDataTrainingSet() {
-        mDialog.show();
+        mDialog.show(this, "working", "still working");
 
 
         Azure azure = retrofit.create(Azure.class);
-        Log.d(this.getClass().getName(), "start Fetching Date - before");
 
         Call<ResponseDataWrapper> call = azure.loadRepo(setupRequestWithTrainingsSet());
         call.enqueue(new Callback<ResponseDataWrapper>() {
