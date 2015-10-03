@@ -1,7 +1,7 @@
 package ch.christofbuechi.android_amander.services;
 
-import ch.christofbuechi.android_amander.model.Data;
-import ch.christofbuechi.android_amander.model.DataWrapper;
+import ch.christofbuechi.android_amander.model.RequestData;
+import ch.christofbuechi.android_amander.model.ResponseDataWrapper;
 import retrofit.Call;
 import retrofit.http.Body;
 import retrofit.http.POST;
@@ -14,7 +14,7 @@ public interface Azure {
 //    Call<DataWrapper> trainignset();
 
     @POST("/magic")
-    Call<DataWrapper> loadRepo(@Body Data wrapper);
+    Call<ResponseDataWrapper> loadRepo(@Body RequestData requestWrapper);
 
 //    @POST("/repos/")
 //    Call<List<DataWrapper>> trainignset(@Path("owner") String owner, @Path("repo") String repo);

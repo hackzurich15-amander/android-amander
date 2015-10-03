@@ -14,8 +14,8 @@ import com.squareup.okhttp.OkHttpClient;
 import java.util.ArrayList;
 import java.util.List;
 
-import ch.christofbuechi.android_amander.model.Data;
-import ch.christofbuechi.android_amander.model.DataWrapper;
+import ch.christofbuechi.android_amander.model.RequestData;
+import ch.christofbuechi.android_amander.model.ResponseDataWrapper;
 import ch.christofbuechi.android_amander.model.FilterInclude;
 import ch.christofbuechi.android_amander.model.Wrapper;
 import ch.christofbuechi.android_amander.services.Azure;
@@ -33,7 +33,7 @@ public class AmanderSelectorActivity extends AppCompatActivity {
     private Resources resources;
     private Retrofit retrofit;
     private FilterInclude filter;
-    private Data wrapper;
+    private RequestData wrapper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,10 +83,10 @@ public class AmanderSelectorActivity extends AppCompatActivity {
         Azure azure = retrofit.create(Azure.class);
 
 
-        Call<DataWrapper> call = azure.loadRepo(wrapper);
-        call.enqueue(new Callback<DataWrapper>() {
+        Call<ResponseDataWrapper> call = azure.loadRepo(wrapper);
+        call.enqueue(new Callback<ResponseDataWrapper>() {
             @Override
-            public void onResponse(Response<DataWrapper> response, Retrofit retrofit) {
+            public void onResponse(Response<ResponseDataWrapper> response, Retrofit retrofit) {
                 Log.d("CallBack", " response is " + response);
             }
 
@@ -151,12 +151,12 @@ public class AmanderSelectorActivity extends AppCompatActivity {
 
     }
 
-    private Data setupInitialRequestObject(int count, FilterInclude filter, List<Wrapper> list) {
-        Data data = new Data();
-        data.count = count;
-        data.filterInclude = filter;
-        data.data = list;
-        return data;
+    private RequestData setupInitialRequestObject(int count, FilterInclude filter, List<Wrapper> list) {
+        RequestData requestData = new RequestData();
+        requestData.count = count;
+        requestData.filterInclude = filter;
+        requestData.data = list;
+        return requestData;
     }
 
     private boolean isTrainingSetAvailable() {

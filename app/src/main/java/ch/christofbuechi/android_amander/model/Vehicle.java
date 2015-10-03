@@ -6,6 +6,8 @@ package ch.christofbuechi.android_amander.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 public class Vehicle {
 
     @SerializedName("vin")
@@ -67,6 +69,11 @@ public class Vehicle {
     public Integer designScore;
     @SerializedName("match")
     @Expose
-    public Boolean match;
+    public Double match;
+
+    @SerializedName("imageUrl")
+    @Expose
+    public List<String> imageUrls;
+
 
 }
