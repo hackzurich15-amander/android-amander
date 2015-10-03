@@ -29,7 +29,7 @@ import retrofit.Retrofit;
 /**
  * Created by christof on 03.10.15.
  */
-public class LoadingScreen extends AppCompatActivity {
+public class LoadingScreenActivity extends AppCompatActivity {
     private static final String API_URL = "http://amander.azurewebsites.net";
     private Retrofit retrofit;
     private ProgressDialog mDialog;
@@ -37,6 +37,8 @@ public class LoadingScreen extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
         super.onCreate(savedInstanceState, persistentState);
+
+        Log.d(this.getClass().getName(), "Loading");
 
         Intent intent = getIntent();
 
@@ -62,7 +64,7 @@ public class LoadingScreen extends AppCompatActivity {
                 .client(client)
                 .build();
 
-
+        Log.d(this.getClass().getName(), "start Fetching Date");
         fetchinitialDataTrainingSet();
     }
 
@@ -72,11 +74,13 @@ public class LoadingScreen extends AppCompatActivity {
 
 
         Azure azure = retrofit.create(Azure.class);
+        Log.d(this.getClass().getName(), "start Fetching Date - before");
 
         Call<ResponseDataWrapper> call = azure.loadRepo(setupRequestWithTrainingsSet());
         call.enqueue(new Callback<ResponseDataWrapper>() {
             @Override
             public void onResponse(Response<ResponseDataWrapper> response, Retrofit retrofit) {
+                Log.d(this.getClass().getName(), "received data");
                 final List<Vehicle> freshVehicles = response.body().getVehicles();
 
                 PictureFetchTask task = new PictureFetchTask(freshVehicles, new ProcessFinishedCallback() {
@@ -85,7 +89,7 @@ public class LoadingScreen extends AppCompatActivity {
                         DirtyDataPersistence.INSTANCE.addTodoVehicleList(freshVehicles);
                         mDialog.dismiss();
 
-                        Intent intent = new Intent(LoadingScreen.this, AmanderSelectorActivity.class);
+                        Intent intent = new Intent(LoadingScreenActivity.this, AmanderSelectorActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(intent);
                     }

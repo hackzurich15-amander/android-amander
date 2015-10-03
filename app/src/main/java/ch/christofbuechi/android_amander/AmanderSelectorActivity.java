@@ -1,6 +1,5 @@
 package ch.christofbuechi.android_amander;
 
-import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -11,24 +10,15 @@ import com.andtinder.model.CardModel;
 
 import java.util.List;
 
-import ch.christofbuechi.android_amander.model.FilterInclude;
-import ch.christofbuechi.android_amander.model.RequestData;
 import ch.christofbuechi.android_amander.model.Vehicle;
 import ch.christofbuechi.android_amander.services.DirtyDataPersistence;
-import retrofit.Retrofit;
 
 public class AmanderSelectorActivity extends AppCompatActivity {
-    private static final String VEHICLES_KEY = "VEHICLES_LEARNED";
 
 
-    private static final String API_URL = "http://amander.azurewebsites.net";
     private MyCardContainer mCardContainer;
     private MyCarCardStackAdapter adapter;
     private Resources resources;
-    private Retrofit retrofit;
-    private FilterInclude filter;
-    private RequestData wrapper;
-    private SharedPreferences mPrefs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +26,8 @@ public class AmanderSelectorActivity extends AppCompatActivity {
         setContentView(R.layout.activity_amander_selector);
         mCardContainer = (MyCardContainer) findViewById(R.id.layoutview2);
         resources = getResources();
+
+
 
 
         List<Vehicle> list = DirtyDataPersistence.INSTANCE.getAllToDoVehicle();

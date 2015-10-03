@@ -16,6 +16,11 @@
             android:label="@string/title_activity_amander_selector"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
+        <activity
+            android:name=".LoadingScreenActivity"
+            android:label="@string/title_activity_amander_selector"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
         <activity android:name=".FilterActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>

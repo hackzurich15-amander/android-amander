@@ -42,7 +42,7 @@ public class FilterActivity extends AppCompatActivity {
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(FilterActivity.this, AmanderSelectorActivity.class);
+                Intent intent = new Intent(FilterActivity.this, LoadingScreenActivity.class);
                 addValuesToIntent(intent);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
