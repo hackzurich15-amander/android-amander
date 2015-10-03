@@ -33,10 +33,11 @@ public class AmanderSelectorActivity extends AppCompatActivity {
         setContentView(R.layout.activity_amander_selector);
         mCardContainer = (MyCardContainer) findViewById(R.id.layoutview2);
         retrofit = new Retrofit.Builder()
-
                 .baseUrl(API_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
+
+
 
 
         resources = getResources();

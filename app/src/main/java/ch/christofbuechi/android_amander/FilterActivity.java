@@ -14,11 +14,18 @@ public class FilterActivity extends AppCompatActivity {
     private int progressPrice = 0;
     private int progressPS = 0;
     private Spinner spinner;
+    private TextView minPSValue;
+    private TextView maxPriceValue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_filter);
+
+        initSeekBars();
+
+        minPSValue = (TextView) findViewById(R.id.minpsvalue);
+        maxPriceValue = (TextView) findViewById(R.id.maxpricevalue);
 
         spinner = (Spinner) findViewById(R.id.spinner);
 // Create an ArrayAdapter using the string array and a default spinner layout
@@ -28,33 +35,7 @@ public class FilterActivity extends AppCompatActivity {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 // Apply the adapter to the spinner
         spinner.setAdapter(adapter);
-        SeekBar seekPrice = (SeekBar) findViewById(R.id.seekBarprice);
-        seekPrice.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                progressPrice = progress;
-            }
-
-            public void onStartTrackingTouch(SeekBar seekBar) {
-            }
-
-            public void onStopTrackingTouch(SeekBar seekBar) {
-            }
-        });
-
-        SeekBar seekPS = (SeekBar) findViewById(R.id.seekBarps);
-        seekPS.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                progressPS = progress;
-            }
-
-            public void onStartTrackingTouch(SeekBar seekBar) {
-            }
-
-            public void onStopTrackingTouch(SeekBar seekBar) {
-            }
-        });
 
 
         TextView sendButton = (TextView) findViewById(R.id.sendButton);
@@ -65,6 +46,46 @@ public class FilterActivity extends AppCompatActivity {
                 addValuesToIntent(intent);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
+            }
+        });
+    }
+
+    private void initSeekBars() {
+        SeekBar seekPrice = (SeekBar) findViewById(R.id.seekBarprice);
+        seekPrice.incrementProgressBy(1000);
+        final int yourStepPrice = 1000;
+        seekPrice.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                progress = ((int)Math.round(progress/yourStepPrice ))*yourStepPrice;
+                seekBar.setProgress(progress);
+                progressPrice = progress;
+                maxPriceValue.setText("" + progressPrice);
+            }
+
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
+
+            public void onStopTrackingTouch(SeekBar seekBar) {
+            }
+        });
+
+        SeekBar seekPS = (SeekBar) findViewById(R.id.seekBarps);
+        final int yourStep = 10;
+        seekPS.incrementProgressBy(10);
+        seekPS.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                progress = ((int)Math.round(progress/yourStep ))*yourStep;
+                seekBar.setProgress(progress);
+                progressPS = progress;
+                minPSValue.setText("" + progressPS);
+            }
+
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
+
+            public void onStopTrackingTouch(SeekBar seekBar) {
             }
         });
     }

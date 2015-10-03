@@ -55,12 +55,21 @@
             android:text="Minimum PS"
             android:textAppearance="?android:attr/textAppearanceLarge"/>
 
+        <TextView
+            android:id="@+id/minpsvalue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:textAppearance="?android:attr/textAppearanceLarge"/>
+
+
+
         <SeekBar
             android:id="@+id/seekBarps"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:max="100"
+            android:max="900"
             android:progress="0"
             android:progressDrawable="@drawable/progressbar"/>
 
@@ -72,12 +81,20 @@
             android:text="maximum Price"
             android:textAppearance="?android:attr/textAppearanceLarge"/>
 
+
+        <TextView
+            android:id="@+id/maxpricevalue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:textAppearance="?android:attr/textAppearanceLarge"/>
+
         <SeekBar
             android:id="@+id/seekBarprice"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:max="100"
+            android:max="150000"
             android:progress="0"
             android:progressDrawable="@drawable/progressbar"/>
 
