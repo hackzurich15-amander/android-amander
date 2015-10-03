@@ -24,6 +24,9 @@ public class RequestData {
     public FilterInclude filterInclude;
 
     public static List<Wrapper> fromVehicles(List<Vehicle> vehicles) {
+        if(vehicles==null || vehicles.isEmpty()){
+            return new ArrayList<Wrapper>() ;
+        }
         List<Wrapper> wrapped = new ArrayList<>(vehicles.size());
         for (Vehicle vehicle : vehicles) {
             wrapped.add(Wrapper.fromVehicle(vehicle));

@@ -16,6 +16,7 @@ import ch.christofbuechi.android_amander.model.FilterInclude;
 import ch.christofbuechi.android_amander.model.RequestData;
 import ch.christofbuechi.android_amander.model.ResponseDataWrapper;
 import ch.christofbuechi.android_amander.model.Vehicle;
+import ch.christofbuechi.android_amander.model.Wrapper;
 import ch.christofbuechi.android_amander.services.Azure;
 import ch.christofbuechi.android_amander.services.DirtyDataPersistence;
 import ch.christofbuechi.android_amander.services.PictureFetchTask;
@@ -110,7 +111,7 @@ public class LoadingScreenActivity extends AppCompatActivity {
         RequestData requestData = new RequestData();
         requestData.count = 10;
         requestData.filterInclude = DirtyDataPersistence.INSTANCE.getFilter();
-//        requestData.data = RequestData.fromVehicles(vehicle);
+        requestData.data = RequestData.fromVehicles(DirtyDataPersistence.INSTANCE.getAllReviewdVehicle());
         return requestData;
     }
 }
