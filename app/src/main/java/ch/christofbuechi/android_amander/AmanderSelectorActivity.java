@@ -17,6 +17,7 @@ import ch.christofbuechi.android_amander.services.DirtyDataPersistence;
 public class AmanderSelectorActivity extends AppCompatActivity {
 
 
+    private static final String TAG ="AmanderSelectorActivity" ;
     private MyCardContainer mCardContainer;
     private MyCarCardStackAdapter adapter;
     private Resources resources;
@@ -24,6 +25,7 @@ public class AmanderSelectorActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d(this.getClass().getName(), "Start Activity");
         setContentView(R.layout.activity_amander_selector);
         mCardContainer = (MyCardContainer) findViewById(R.id.layoutview2);
         resources = getResources();
@@ -71,6 +73,8 @@ public class AmanderSelectorActivity extends AppCompatActivity {
     }
 
     private void checkEmpty() {
+        adapter.pop();
+        Log.i(TAG, "elements in adapter "+adapter.getCount());
        if( adapter.isEmpty()){
            Intent intent = new Intent(AmanderSelectorActivity.this, LoadingScreenActivity.class);
            startActivity(intent);

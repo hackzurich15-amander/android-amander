@@ -36,7 +36,7 @@ public class LoadingScreenActivity extends AppCompatActivity {
     private ProgressDialog mDialog;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_loading_indicator);
         Log.d(this.getClass().getName(), "start Loading Screen Activity");
@@ -51,7 +51,7 @@ public class LoadingScreenActivity extends AppCompatActivity {
             DirtyDataPersistence.INSTANCE.setFilter(new FilterInclude(brand, minps, maxprice));
         }
 
-        mDialog = new ProgressDialog(LoadingScreenActivity.this);
+        mDialog = new ProgressDialog(getApplicationContext());
         mDialog.setMessage("Please wait...");
         mDialog.setCancelable(false);
 
@@ -71,7 +71,7 @@ public class LoadingScreenActivity extends AppCompatActivity {
 
 
     private void fetchinitialDataTrainingSet() {
-        mDialog.show();
+        mDialog.show(this, "working", "still working");
 
 
         Azure azure = retrofit.create(Azure.class);
