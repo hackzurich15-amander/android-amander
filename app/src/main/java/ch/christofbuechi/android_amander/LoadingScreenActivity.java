@@ -16,7 +16,6 @@ import ch.christofbuechi.android_amander.model.FilterInclude;
 import ch.christofbuechi.android_amander.model.RequestData;
 import ch.christofbuechi.android_amander.model.ResponseDataWrapper;
 import ch.christofbuechi.android_amander.model.Vehicle;
-import ch.christofbuechi.android_amander.model.Wrapper;
 import ch.christofbuechi.android_amander.services.Azure;
 import ch.christofbuechi.android_amander.services.DirtyDataPersistence;
 import ch.christofbuechi.android_amander.services.PictureFetchTask;
@@ -80,12 +79,11 @@ public class LoadingScreenActivity extends AppCompatActivity {
             public void onResponse(Response<ResponseDataWrapper> response, Retrofit retrofit) {
                 final List<Vehicle> freshVehicles = response.body().getVehicles();
 
-                PictureFetchTask task = new PictureFetchTask(freshVehicles, new ProcessFinishedCallback() {
+                PictureFetchTask task = new PictureFetchTask(LoadingScreenActivity.this, freshVehicles, new ProcessFinishedCallback() {
                     @Override
                     public void processFinished() {
                         DirtyDataPersistence.INSTANCE.addTodoVehicleList(freshVehicles);
                         mDialog.dismiss();
-
                         Intent intent = new Intent(LoadingScreenActivity.this, AmanderSelectorActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(intent);
