@@ -3,13 +3,13 @@ package ch.christofbuechi.android_amander;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
+import android.widget.Toast;
 
 import com.facebook.stetho.okhttp.StethoInterceptor;
 import com.squareup.okhttp.OkHttpClient;
 
+import java.net.SocketTimeoutException;
 import java.util.List;
 
 import ch.christofbuechi.android_amander.model.FilterInclude;
@@ -31,7 +31,6 @@ import retrofit.Retrofit;
  */
 public class LoadingScreenActivity extends AppCompatActivity {
     private static final String API_URL = "http://amander.azurewebsites.net";
-    private static final String TAG = "LoadingScreen";
     private Retrofit retrofit;
     private ProgressDialog mDialog;
 
@@ -39,7 +38,6 @@ public class LoadingScreenActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_loading_indicator);
-        Log.d(this.getClass().getName(), "start Loading Screen Activity");
 
 
         Intent intent = getIntent();
@@ -65,7 +63,6 @@ public class LoadingScreenActivity extends AppCompatActivity {
                 .client(client)
                 .build();
 
-        Log.d(this.getClass().getName(), "start Fetching Date");
         fetchinitialDataTrainingSet();
     }
 
@@ -75,13 +72,11 @@ public class LoadingScreenActivity extends AppCompatActivity {
 
 
         Azure azure = retrofit.create(Azure.class);
-        Log.d(this.getClass().getName(), "start Fetching Date - before");
 
         Call<ResponseDataWrapper> call = azure.loadRepo(setupRequestWithTrainingsSet());
         call.enqueue(new Callback<ResponseDataWrapper>() {
             @Override
             public void onResponse(Response<ResponseDataWrapper> response, Retrofit retrofit) {
-                Log.d(this.getClass().getName(), "received data");
                 final List<Vehicle> freshVehicles = response.body().getVehicles();
 
                 PictureFetchTask task = new PictureFetchTask(freshVehicles, new ProcessFinishedCallback() {
@@ -91,8 +86,7 @@ public class LoadingScreenActivity extends AppCompatActivity {
                         mDialog.dismiss();
 
                         Intent intent = new Intent(LoadingScreenActivity.this, AmanderSelectorActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        Log.i(TAG,"start Activity");
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(intent);
                     }
                 });
@@ -103,8 +97,11 @@ public class LoadingScreenActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Throwable t) {
-                Log.d("CallBack", " Throwable is " + t);
+                if (t instanceof SocketTimeoutException) {
+                    Toast.makeText(LoadingScreenActivity.this, "No Network connection available", Toast.LENGTH_LONG).show();
+                }
             }
+
         });
 
     }

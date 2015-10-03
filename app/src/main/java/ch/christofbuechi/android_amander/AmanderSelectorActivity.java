@@ -30,13 +30,8 @@ public class AmanderSelectorActivity extends AppCompatActivity {
         mCardContainer = (MyCardContainer) findViewById(R.id.layoutview2);
         resources = getResources();
 
-
-
-
         List<Vehicle> list = DirtyDataPersistence.INSTANCE.getAllToDoVehicle();
         addToModel(list);
-
-
     }
 
 
