@@ -11,7 +11,7 @@ import retrofit.Retrofit;
 
 public class AmanderSelectorActivity extends AppCompatActivity {
 
-    private static final String API_URL = "API URL";
+    private static final String API_URL = "http://4amander.cloudapp.net";
     private MyCardContainer mCardContainer;
     private MyCarCardStackAdapter adapter;
     private Resources resources;
