@@ -11,6 +11,7 @@ import com.squareup.okhttp.OkHttpClient;
 
 import java.net.SocketTimeoutException;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import ch.christofbuechi.android_amander.model.FilterInclude;
 import ch.christofbuechi.android_amander.model.RequestData;
@@ -55,6 +56,7 @@ public class LoadingScreenActivity extends AppCompatActivity {
 
 
         OkHttpClient client = new OkHttpClient();
+        client.setConnectTimeout(15, TimeUnit.SECONDS);
         client.networkInterceptors().add(new StethoInterceptor());
 
         retrofit = new Retrofit.Builder()

@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:paddingTop="20dp"
-        android:text="pleace wait while data is loading"
+        android:text="Please wait while data is loading"
         android:textSize="20dp"
         android:paddingBottom="20dp"
         android:layout_alignParentTop="true"

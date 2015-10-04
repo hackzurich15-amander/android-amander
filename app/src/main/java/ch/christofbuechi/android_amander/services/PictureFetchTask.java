@@ -63,6 +63,7 @@ public class PictureFetchTask extends AsyncTask<Void, Void, List<Vehicle>> {
         HttpURLConnection connection = null;
         try {
             connection = (HttpURLConnection) url.openConnection();
+            connection.setConnectTimeout(15 * 1000);
             connection.connect();
             int responseCode = connection.getResponseCode();
             if (responseCode == 200) {
